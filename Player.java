@@ -9,7 +9,7 @@ public class Player {
     private int shootSpeed;
     private int pxpos;
     private int pypos;
-    private boolean status = true;
+    private boolean status;
 
     public Player(int l, int mS, int sS, int xpos, int ypos, boolean s){
         lives = l;
@@ -20,13 +20,20 @@ public class Player {
         status = s;
     }
     
-    public boolean getStatus(){
+    public boolean getStatus (){
         return this.status;
     }
 
-    public void moveLeft(KeyEvent l){
-        //needs paint component done to work
-        
+    public int getPxpos() {
+        return pxpos;
     }
+
+    public int getPypos() {
+        return pypos;
+    }
+    // public void moveLeft(KeyEvent l){
+    //     //needs paint component done to work
+        
+    // }
     
 }
