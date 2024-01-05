@@ -9,13 +9,16 @@ import java.awt.event.KeyListener;
 
 public class Space extends JPanel implements KeyListener{
     private JFrame myFrame;
-    int bordx = 800;
+    int bordx = 1600;
     int bordy = 900;
     Player p1 = new Player(3, 5, 10, bordx/2, 750, true);
-    Alien a1 = new Alien(10, 50, 50, 50);
+    Alien a1 = new Alien(10, 50, 50, 50, false);
+    Bullet b1 = new Bullet(40,p1.getPxpos(),p1.getPypos());
     ArrayList<Alien> Aliens = new ArrayList<Alien>();
     int turn;
     int round;
+
+
 
     public Space(){
       myFrame = new JFrame("GO HOME ET!");
@@ -34,28 +37,20 @@ public class Space extends JPanel implements KeyListener{
     }
 
     public void initializeAliens(){
-        int row = 4;
+        int row = 6;
         int col = 10;
         for(int y = 0; y<row; y++){
             for(int x = 0; x < col; x++){
-                Aliens.add(new Alien(10, 40 + 64*x , 16 + y*64, 40));
+                Aliens.add(new Alien(10, 40 + 64*x , 16 + y*64, 40, false));
             } 
         }
     }
 
-    public void hl2(){
-        int row = 4;
-        int col = 10;
-        for(int y = 0; y<row; y++){
-            for(int x = 0; x < col; x++){
-                Aliens.add(new Alien(10, 40 + 64*x , 16 + y*64, 40));
-            } 
-        }
-    }
+
 
     public void takeABeat(int milliseconds){
         try {
-            Thread.sleep(1000); //milliseconds
+            Thread.sleep(milliseconds); //milliseconds
         } catch(Exception e){
 
         }
@@ -75,15 +70,26 @@ public class Space extends JPanel implements KeyListener{
 
     public void alienMovement(){
         System.out.println("hi");
-        for (int r = 0; r<12; r++){
+        for (int r = 0; r<15; r++){
             round = r;
             shiftVert(16);
-            for (int t = 1; t<=3; t++){
-                takeABeat(1000);
+            for (int t = 1; t<=54; t++){
+                takeABeat(100);
                 turn = t; 
-                shiftHori(32 * (int)Math.pow(-1, round));
+                shiftHori(16 * (int)Math.pow(-1, round));
+                for (Bullet am: b1.getArrayList()){    
+                    am.setBYpos(-1*(am.getSpeed()));      
                 }
-        takeABeat(1000);
+                }
+        takeABeat(100);
+        for (Bullet am: b1.getArrayList()){    
+            am.setBYpos(-1*(am.getSpeed()));      
+            for(Alien a: Aliens){
+                if((am.getBXpos() > a.getAxpos()-25 && am.getBXpos() < a.getAxpos() +75) && (am.getBYpos() > a.getAypos() && am.getBYpos() < a.getAypos() +50)){
+                    a.MarkForD(true);                    
+                }
+            }
+        }
         }
     }
 
@@ -95,6 +101,7 @@ public class Space extends JPanel implements KeyListener{
         g.setColor(Color.white);
         drawPlayer(p1,g);
         drawAlien(g);
+        drawBullet(g);
         
   
     }
@@ -104,24 +111,39 @@ public class Space extends JPanel implements KeyListener{
         
     }
 
+    public void centerFillOval(int x, int y, int w, int h, Graphics g){
+        g.fillOval(x - w/2, y + h/2, w, h);
+    }
+
+
     public void drawPlayer(Player p, Graphics g){
         g.setColor(Color.WHITE);
         centerFillRect(p.getPxpos(), p.getPypos(), 40, 40, g);
         
     }
 
+    public void drawBullet(Graphics g){
+        g.setColor(Color.WHITE);
+        for (Bullet am: b1.getArrayList()){
+            centerFillOval(am.getBXpos(), am.getBYpos(), 30, 30, g);
+        }
+
+    }
+    
+
     public void drawAlien(Graphics g){
         for (Alien a : Aliens){
+            g.setColor(Color.WHITE);
+            if (a.getMFD()){
+                g.setColor(Color.BLACK);
+            }
+            
             int [] x = {a.getAxpos(), a.getAxpos() + a.getSize()/2, a.getAxpos() + a.getSize()};
             int [] y = {a.getAypos(), a.getAypos() + a.getSize(), a.getAypos()};
-            g.setColor(Color.WHITE);
-            g.fillPolygon(x, y, 3);
-        }
             
-
-
-
-        
+            g.fillPolygon(x, y, 3);
+            
+        }
     }
 
     public void runGame(int speedMult){
@@ -144,24 +166,27 @@ public class Space extends JPanel implements KeyListener{
     public void keyPressed(KeyEvent e) {
 
         int keyCode = e.getKeyCode();
-        System.out.println(p1.getPxpos() );
         if(keyCode == KeyEvent.VK_A){ 
             if(p1.getPxpos() - 20> 40){
                 p1.changePxpos(-10);  
-                repaint();
             }
         }
         if(keyCode == KeyEvent.VK_D){
-            if(p1.getPxpos() + 20 < 760){
+            if(p1.getPxpos() + 20 < 1560){
                 p1.changePxpos(10); 
-                repaint();
+            }
+            
+        }
+        if(keyCode == KeyEvent.VK_SPACE){
+                b1.createBullet(p1.getPxpos(),p1.getPypos());
+                // moveBullets();
             }
             
         }
         
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
-    }
+
 
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub

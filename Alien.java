@@ -13,13 +13,15 @@ public class Alien{
     public int Axpos;
     public int Aypos;
     public int size;
+    public boolean mfd;
     
     
-    public Alien(int m, int x, int y, int sz){
+    public Alien(int m, int x, int y, int sz, boolean l){
         ams = m;
         Axpos = x;
         Aypos = y;        
         size = sz;
+        mfd = l;
     }
 
     public int getAxpos(){
@@ -43,6 +45,13 @@ public class Alien{
     }
     // public Graphics ag = space.get
 
+    public boolean getMFD(){
+        return mfd;
+    }
+
+    public void MarkForD(boolean l){
+        mfd = l;
+    }
 
 
 }
