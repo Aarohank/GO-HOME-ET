@@ -24,28 +24,32 @@ public class Space extends JPanel implements KeyListener{
       this.setFocusable(true);
       myFrame.setVisible(true);
       addKeyListener(this);
-      
+      initializeAliens();
       runGame(1);
-      
         
-    }
-
-    public void initializeAliens(){
-        // ArrayList<Alien> Aliens = new ArrayList<Alien>();
-        Alien a1 = new Alien(10, 50, 50, 30);
     }
     
     public void initializePlayer(){
         Player p1 = new Player(3, 5, 10, 800, 40, true);
     }
 
-    public void testAliens(int t, int r){
+    public void initializeAliens(){
         int row = 4;
         int col = 10;
         for(int y = 0; y<row; y++){
-            for(int x = 0; x<col; x++){
-            Aliens.add(new Alien(10, 40 + 64*x + 16*t, 16 + y*64 + 16*r, 40));
-        } 
+            for(int x = 0; x < col; x++){
+                Aliens.add(new Alien(10, 40 + 64*x , 16 + y*64, 40));
+            } 
+        }
+    }
+
+    public void hl2(){
+        int row = 4;
+        int col = 10;
+        for(int y = 0; y<row; y++){
+            for(int x = 0; x < col; x++){
+                Aliens.add(new Alien(10, 40 + 64*x , 16 + y*64, 40));
+            } 
         }
     }
 
@@ -57,30 +61,30 @@ public class Space extends JPanel implements KeyListener{
         }
     }
 
-    public void ticktock(){
-        Aliens.clear();
-        boolean lorR = true;
-        for (int r = 0; r>12; r++){
-            round = r;
-            if(lorR== true){
-                for (int t = 0; t>3; t++){
-                    takeABeat(1000);
-                    turn = t; 
-                    Aliens.clear();
-
-                }
-            lorR = false;
-            }
-            if(lorR== false){
-                for (int t = 3; t>0; t--){
-                    takeABeat(1000);
-                    turn = t; 
-                    Aliens.clear();
-                }
-            lorR = true;
-            }
+    public void shiftHori(int d){
+        for (Alien a: Aliens){
+            a.setAxpos(d);
         }
-        
+    }
+
+    public void shiftVert(int d){
+        for (Alien a: Aliens){
+            a.setAypos(d);
+        }
+    }
+
+    public void alienMovement(){
+        System.out.println("hi");
+        for (int r = 0; r<12; r++){
+            round = r;
+            shiftVert(16);
+            for (int t = 1; t<=3; t++){
+                takeABeat(1000);
+                turn = t; 
+                shiftHori(32 * (int)Math.pow(-1, round));
+                }
+        takeABeat(1000);
+        }
     }
 
 
@@ -90,8 +94,8 @@ public class Space extends JPanel implements KeyListener{
         g.fillRect(0, 0, bordx, bordy);
         g.setColor(Color.white);
         drawPlayer(p1,g);
-        ticktock();
         drawAlien(g);
+        
   
     }
 
@@ -101,7 +105,6 @@ public class Space extends JPanel implements KeyListener{
     }
 
     public void drawPlayer(Player p, Graphics g){
-    
         g.setColor(Color.WHITE);
         centerFillRect(p.getPxpos(), p.getPypos(), 40, 40, g);
         
@@ -123,7 +126,7 @@ public class Space extends JPanel implements KeyListener{
 
     public void runGame(int speedMult){
         paintComponent(getGraphics());
-
+        alienMovement();
     }
 
     public void keyTyped(KeyEvent e) {

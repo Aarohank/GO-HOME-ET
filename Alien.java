@@ -33,6 +33,14 @@ public class Alien{
     public int getSize(){
         return size;
     }
+
+    public void setAxpos(int d){
+        Axpos += d;
+    }
+
+    public void setAypos(int d){
+        Aypos += d;
+    }
     // public Graphics ag = space.get
 
 
