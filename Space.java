@@ -68,20 +68,19 @@ public class Space extends JPanel implements KeyListener{
         }
     }
 
-    public void alienMovement(){
-        System.out.println("hi");
-        for (int r = 0; r<15; r++){
+    public void alienMovement(int d, int cd, int maxR){
+        for (int r = 0; r<maxR; r++){
             round = r;
-            shiftVert(16);
+            shiftVert(d);
             for (int t = 1; t<=54; t++){
-                takeABeat(100);
+                takeABeat(cd);
                 turn = t; 
-                shiftHori(16 * (int)Math.pow(-1, round));
+                shiftHori(d * (int)Math.pow(-1, round));
                 for (Bullet am: b1.getArrayList()){    
                     am.setBYpos(-1*(am.getSpeed()));      
                 }
                 }
-        takeABeat(100);
+        takeABeat(cd);
         for (Bullet am: b1.getArrayList()){    
             am.setBYpos(-1*(am.getSpeed()));      
             for(Alien a: Aliens){
