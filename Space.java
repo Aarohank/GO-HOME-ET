@@ -147,7 +147,7 @@ public class Space extends JPanel implements KeyListener{
 
     public void runGame(int speedMult){
         paintComponent(getGraphics());
-        alienMovement();
+        alienMovement(16,100,15);
     }
 
     public void keyTyped(KeyEvent e) {
